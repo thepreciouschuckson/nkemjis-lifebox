@@ -1,0 +1,21 @@
+// Fake items for building the front end. We replace this with the real API in step 3.
+export const SAMPLE_ITEMS = [
+  { id: "1", title: "Codenames", category: "games", link: "https://example.com/codenames", image: "",
+    notes: "Great for games night. Teams of 2 or more.", tags: ["games night", "word game"], status: "want",
+    extra: { players: "4+", playOn: "In person" }, createdAt: "2026-11-10T10:00:00Z", updatedAt: "2026-11-10T10:00:00Z" },
+  { id: "2", title: "Knotless braids with curls", category: "hairstyles", link: "", image: "",
+    notes: "Ask for mid-back length.", tags: ["braids"], status: "want",
+    extra: {}, createdAt: "2026-11-11T10:00:00Z", updatedAt: "2026-11-11T10:00:00Z" },
+  { id: "3", title: "Jollof rice with smoked pepper", category: "recipes", link: "https://example.com/jollof", image: "",
+    notes: "Try for the weekend.", tags: ["rice", "weekend"], status: "tried",
+    extra: {}, createdAt: "2026-11-12T10:00:00Z", updatedAt: "2026-11-12T10:00:00Z" },
+  { id: "4", title: "Intro to Product Analytics", category: "learn", link: "https://example.com/course", image: "",
+    notes: "Start with module 2.", tags: ["pm", "data"], status: "want",
+    extra: { format: "Course", finished: false }, createdAt: "2026-11-13T10:00:00Z", updatedAt: "2026-11-13T10:00:00Z" },
+  { id: "5", title: "A quiet cafe with good light", category: "cafes", link: "", image: "",
+    notes: "For writing days.", tags: ["writing"], status: "want",
+    extra: {}, createdAt: "2026-11-14T10:00:00Z", updatedAt: "2026-11-14T10:00:00Z" },
+  { id: "6", title: "Spirited Away", category: "movies", link: "", image: "",
+    notes: "Rewatch with friends.", tags: ["cozy"], status: "loved",
+    extra: { watchOn: "Netflix" }, createdAt: "2026-11-15T10:00:00Z", updatedAt: "2026-11-15T10:00:00Z" },
+];

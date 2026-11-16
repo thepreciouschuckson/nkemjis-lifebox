@@ -80,6 +80,8 @@ function openEditor(id) {
   $("#f-tags").value = (i?.tags || []).join(", ");
   $("#f-status").value = i?.status || "want";
   $("#f-image").value = i?.image || "";
+  $("#up-status").hidden = true;
+  showCover();
   renderExtra(catKey, i?.extra);
   $("#more").open = !!i;
   $("#delete").hidden = !i;
@@ -132,6 +134,42 @@ $("#delete").addEventListener("click", async () => {
 });
 $("#cancel").addEventListener("click", () => dlg.close());
 dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+
+/* Cover photos */
+async function shrink(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, no) => { const el = new Image(); el.onload = () => ok(el); el.onerror = no; el.src = url; });
+    const scale = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise((ok) => c.toBlob(ok, "image/jpeg", 0.82));
+  } finally { URL.revokeObjectURL(url); }
+}
+function showCover() {
+  const v = $("#f-image").value.trim();
+  $("#f-preview").hidden = !v;
+  if (v) $("#f-preview").src = v;
+  $("#rm-img").hidden = !v;
+}
+$("#f-file").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const st = $("#up-status");
+  st.hidden = false; st.textContent = "Uploading photo...";
+  try {
+    const blob = await shrink(file);
+    const r = await fetch("/api/upload", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/octet-stream", "X-Image-Type": "image/jpeg" }, body: blob });
+    if (r.status === 401) { dlg.close(); showLogin(); return; }
+    if (!r.ok) throw new Error("upload");
+    $("#f-image").value = (await r.json()).url;
+    st.hidden = true; showCover();
+  } catch { st.textContent = "Photo upload failed. Try again."; }
+  e.target.value = "";
+});
+$("#rm-img").addEventListener("click", () => { $("#f-image").value = ""; showCover(); });
+$("#f-image").addEventListener("input", showCover);
 
 /* Page controls */
 $("#add").addEventListener("click", () => openEditor());

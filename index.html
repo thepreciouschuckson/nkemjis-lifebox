@@ -52,7 +52,11 @@
         <label>Tags <input id="f-tags" placeholder="games night, cozy"></label>
         <label>Status <select id="f-status"></select></label>
         <div id="extra"></div>
-        <label>Image link <input id="f-image" type="url" inputmode="url" placeholder="Image uploads come later"></label>
+        <label>Cover photo <input id="f-file" type="file" accept="image/*"></label>
+        <p id="up-status" class="count" hidden></p>
+        <img id="f-preview" alt="" hidden referrerpolicy="no-referrer">
+        <button type="button" id="rm-img" class="ghost" hidden>Remove cover</button>
+        <label>Image link <input id="f-image" type="url" inputmode="url" placeholder="Or paste an image link"></label>
       </details>
       <div class="actions">
         <button type="button" id="delete" class="ghost danger">Delete</button>

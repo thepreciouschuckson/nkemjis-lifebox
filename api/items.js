@@ -2,6 +2,7 @@ import { waitUntil } from "@vercel/functions";
 import { sql, toItem } from "../lib/db.js";
 import { isAuthed } from "../lib/auth.js";
 import { unfurl } from "../lib/unfurl.js";
+import { copyRemoteImage } from "../lib/r2.js";
 
 export default async function handler(req, res) {
   try {
@@ -42,6 +43,11 @@ export default async function handler(req, res) {
               image = case when image = '' then coalesce(${newImage}::text, image) else image end,
               updated_at = now()
             where id = ${item.id}`;
+          // Then keep a permanent copy of the cover in your own storage.
+          if (newImage && !image) {
+            const kept = await copyRemoteImage(newImage);
+            if (kept !== newImage) await sql`update items set image = ${kept} where id = ${item.id} and image = ${newImage}`;
+          }
         })().catch((e) => console.error(e)));
       }
 

@@ -36,7 +36,7 @@ function card(i) {
   const c = cat(i.category) || { emoji: "🧺", label: "Random Finds", group: "odds" };
   const col = group(c.group)?.color || "#b8b8c8";
   const st = STATUSES.find((s) => s.key === i.status);
-  const media = i.image ? `<img src="${esc(i.image)}" alt="" loading="lazy">` : `<span>${c.emoji}</span>`;
+  const media = i.image ? `<img src="${esc(i.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${c.emoji}'">` : `<span>${c.emoji}</span>`;
   return `<button class="card ${c.imageFirst ? "tall" : ""}" data-id="${esc(i.id)}" style="--c:${col}">
     <div class="media">${media}</div>
     <div class="body"><h3>${esc(i.title)}</h3>

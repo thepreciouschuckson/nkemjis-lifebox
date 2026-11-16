@@ -31,12 +31,14 @@ export default async function handler(req, res) {
       if (link && (!title || !image)) {
         waitUntil((async () => {
           const found = await unfurl(link);
-          const newTitle = found.title ? found.title.slice(0, 200) : null;
+          const newTitle = found.title || null;
+          const newText = found.text || null;
           const newImage = found.image || null;
           if (!newTitle && !newImage) return;
           await sql`
             update items set
               title = case when title = link then coalesce(${newTitle}::text, title) else title end,
+              notes = case when notes = '' and title = link then coalesce(${newText}::text, notes) else notes end,
               image = case when image = '' then coalesce(${newImage}::text, image) else image end,
               updated_at = now()
             where id = ${item.id}`;

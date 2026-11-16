@@ -1,0 +1,84 @@
+:root {
+  --bg: #f6ecfa;
+  --ink: #3b2a4a;
+  --soft: #7d6a8c;
+  --plum: #7b4fa3;
+  --line: #e3d3ee;
+  --card: #fffdfd;
+  --font-body: "Nunito", system-ui, sans-serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; color: var(--ink); font: 400 1rem/1.5 var(--font-body);
+  padding: env(safe-area-inset-top) 0 calc(96px + env(safe-area-inset-bottom));
+  background: radial-gradient(circle at 12% 0%, #ffe9dc 0, transparent 38%), radial-gradient(circle at 92% 8%, #e0ecff 0, transparent 34%), var(--bg);
+  min-height: 100vh;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 22px 18px; }
+h1 { font: 700 3rem/1 var(--font-hand); margin: 8px 0 2px; color: var(--plum); }
+.tag { margin: 0 0 18px; font: 600 1.35rem var(--font-hand); color: var(--soft); }
+
+input, select, textarea {
+  width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+  padding: 11px 14px; border: 2px solid var(--line); border-radius: 16px; background: #fff;
+}
+input[type="search"] { border-radius: 999px; padding: 14px 20px; box-shadow: 0 6px 18px rgba(123, 79, 163, .12); }
+:focus-visible { outline: 3px solid var(--plum); outline-offset: 2px; }
+
+.tools { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+.tool, .chip {
+  font: 800 .92rem var(--font-body); color: var(--ink); cursor: pointer;
+  border: 2px solid var(--line); background: #fff; border-radius: 999px; padding: 8px 14px;
+}
+.tool.on { background: var(--plum); color: #fff; border-color: var(--plum); }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: none; }
+.chips[hidden] { display: none; }
+.chip { flex: none; white-space: nowrap; }
+.chip.group { --c: var(--plum); background: color-mix(in srgb, var(--c) 22%, #fff); border-color: color-mix(in srgb, var(--c) 45%, #fff); }
+.chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chips.small .chip { font-weight: 600; font-size: .85rem; padding: 6px 12px; }
+.count { margin: 6px 4px 12px; color: var(--soft); font-weight: 600; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; }
+.card {
+  --c: #b8b8c8; text-align: left; font: inherit; color: inherit; cursor: pointer; padding: 0; overflow: hidden;
+  background: var(--card); border: 2px solid color-mix(in srgb, var(--c) 40%, #fff); border-radius: 22px;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--c) 28%, transparent);
+  transition: transform .15s;
+}
+.card:active { transform: scale(.97); }
+.media { height: 104px; display: grid; place-items: center; background: color-mix(in srgb, var(--c) 30%, #fff); font-size: 2.6rem; }
+.card.tall .media { height: 190px; }
+.media img { width: 100%; height: 100%; object-fit: cover; }
+.body { padding: 10px 14px 14px; }
+.body h3 { margin: 0 0 2px; font: 800 1.02rem/1.25 var(--font-body); overflow-wrap: anywhere; }
+.meta { margin: 0; font-size: .82rem; color: var(--soft); }
+.tags { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.tags i { font-style: normal; font-size: .75rem; background: color-mix(in srgb, var(--c) 25%, #fff); border-radius: 999px; padding: 1px 9px; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 40px 10px; font: 600 1.5rem var(--font-hand); color: var(--soft); }
+
+.fab {
+  position: fixed; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom));
+  width: 62px; height: 62px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--plum); color: #fff; font: 600 2.2rem/1 var(--font-body);
+  box-shadow: 0 10px 24px rgba(123, 79, 163, .45);
+}
+
+dialog { width: min(520px, 94vw); max-height: 90vh; border: 0; border-radius: 28px; padding: 22px; color: var(--ink); background: #fffafd; }
+dialog::backdrop { background: rgba(59, 42, 74, .45); }
+dialog h2 { margin: 0 0 8px; font: 700 2rem var(--font-hand); color: var(--plum); }
+dialog label { display: block; font-weight: 800; font-size: .88rem; margin: 12px 0 0; }
+dialog label input, dialog label select, dialog label textarea { margin-top: 4px; font-weight: 400; }
+dialog .check { display: flex; gap: 8px; align-items: center; }
+dialog .check input { width: auto; }
+summary { margin-top: 14px; cursor: pointer; font-weight: 800; color: var(--plum); }
+.actions { display: flex; gap: 8px; margin-top: 20px; }
+.actions .primary { margin-left: auto; }
+.primary, .ghost { font: 800 1rem var(--font-body); border-radius: 999px; padding: 11px 22px; cursor: pointer; }
+.primary { background: var(--plum); color: #fff; border: 2px solid var(--plum); }
+.ghost { background: #fff; color: var(--ink); border: 2px solid var(--line); }
+.ghost.danger { color: #b3366b; }
+
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }

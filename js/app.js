@@ -90,6 +90,7 @@ $("#f-cat").addEventListener("change", (e) => renderExtra(e.target.value));
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!$("#f-title").value.trim() && !$("#f-link").value.trim()) { alert("Add a title or a link."); return; }
   const catKey = $("#f-cat").value;
   const extra = {};
   (cat(catKey)?.extra || []).forEach((x) => {

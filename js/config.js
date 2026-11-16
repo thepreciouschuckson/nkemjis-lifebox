@@ -60,6 +60,7 @@ export const CATEGORIES = [
   { key: "gifts", label: "Gift Ideas", emoji: "🎁", group: "life" },
   { key: "style", label: "Style & Fashion", emoji: "👗", group: "life", imageFirst: true },
   { key: "hairstyles", label: "Hairstyles", emoji: "💇🏾‍♀️", group: "life", imageFirst: true },
+  { key: "skincare", label: "Skincare", emoji: "🧴", group: "life" },
   { key: "buy", label: "Things to Buy", emoji: "🛍️", group: "life" },
   { key: "friends", label: "Friend & Group Ideas", emoji: "👥", group: "life" },
   { key: "quotes", label: "Quotes & Words", emoji: "💬", group: "life" },

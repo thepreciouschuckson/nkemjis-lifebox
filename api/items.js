@@ -1,3 +1,4 @@
+import { waitUntil } from "@vercel/functions";
 import { sql, toItem } from "../lib/db.js";
 import { isAuthed } from "../lib/auth.js";
 import { unfurl } from "../lib/unfurl.js";
@@ -14,20 +15,35 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       const b = req.body || {};
       const link = (b.link || "").trim();
-      let title = (b.title || "").trim();
-      let image = (b.image || "").trim();
+      const title = (b.title || "").trim();
+      const image = (b.image || "").trim();
       if (!title && !link) return res.status(400).json({ error: "A title or link is required" });
-      if (link && (!title || !image)) {
-        const found = await unfurl(link);
-        title = title || found.title.slice(0, 200) || link;
-        image = image || found.image;
-      }
+
+      // Save right away so the Shortcut gets a fast reply.
       const rows = await sql`
         insert into items (title, category, link, image, notes, tags, status, extra)
-        values (${title}, ${b.category || "random"}, ${link}, ${image}, ${b.notes || ""},
+        values (${title || link}, ${b.category || "random"}, ${link}, ${image}, ${b.notes || ""},
                 ${b.tags || []}::text[], ${b.status || "want"}, ${JSON.stringify(b.extra || {})}::jsonb)
         returning *`;
-      return res.status(201).json(toItem(rows[0]));
+      const item = rows[0];
+
+      // Then look up the real title and cover image in the background.
+      if (link && (!title || !image)) {
+        waitUntil((async () => {
+          const found = await unfurl(link);
+          const newTitle = found.title ? found.title.slice(0, 200) : null;
+          const newImage = found.image || null;
+          if (!newTitle && !newImage) return;
+          await sql`
+            update items set
+              title = case when title = link then coalesce(${newTitle}::text, title) else title end,
+              image = case when image = '' then coalesce(${newImage}::text, image) else image end,
+              updated_at = now()
+            where id = ${item.id}`;
+        })().catch((e) => console.error(e)));
+      }
+
+      return res.status(201).json(toItem(item));
     }
 
     res.status(405).end();

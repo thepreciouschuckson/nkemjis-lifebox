@@ -110,7 +110,9 @@ form.addEventListener("submit", async (e) => {
       const saved = await api.update(editingId, data);
       items = items.map((i) => (i.id === editingId ? saved : i));
     } else {
-      items.unshift(await api.create(data));
+      const created = await api.create(data);
+      items.unshift(created);
+      if (created.link && (!data.title || !data.image)) setTimeout(refresh, 5000);
     }
     dlg.close(); render();
   } catch (err) {
@@ -180,6 +182,14 @@ async function boot() {
     else $("#grid").innerHTML = `<p class="empty">Cannot reach the box. Check your connection and refresh.</p>`;
   }
 }
+
+async function refresh() {
+  try { items = await api.list(); render(); }
+  catch (err) { if (err.auth) showLogin(); }
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && !dlg.open && !loginDlg.open) refresh();
+});
 
 renderChips();
 boot();
